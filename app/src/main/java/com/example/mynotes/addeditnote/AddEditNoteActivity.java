@@ -1,7 +1,7 @@
-package com.example.mynotes.notes;
+package com.example.mynotes.addeditnote;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.example.mynotes.R;
@@ -9,11 +9,15 @@ import com.example.mynotes.data.source.NotesRepository;
 import com.example.mynotes.data.source.local.AppDatabase;
 import com.example.mynotes.data.source.local.NotesLocalDataSource;
 import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
+import com.example.mynotes.notes.NotesFragment;
+import com.example.mynotes.notes.NotesPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NotesActivity extends AppCompatActivity {
+public class AddEditNoteActivity extends AppCompatActivity {
+
+    public static final String EXTRA_NOTE_ID = "NOTE_ID";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -26,12 +30,13 @@ public class NotesActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        NotesFragment fragment = NotesFragment.newInstance();
-        new NotesPresenter(fragment, NotesRepository.getInstance(NotesLocalDataSource.getInstance(
+        int noteId = getIntent().getIntExtra(EXTRA_NOTE_ID, 0);
+        AddEditNoteFragment fragment = AddEditNoteFragment.newInstance(noteId);
+        new AddEditNotePresenter(fragment, NotesRepository.getInstance(NotesLocalDataSource.getInstance(
                 AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
-                NotesRemoteDataSource.getInstance()));
+                NotesRemoteDataSource.getInstance()), noteId);
 
         getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
-                NotesFragment.TAG).commit();
+                AddEditNoteFragment.TAG).commit();
     }
 }

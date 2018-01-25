@@ -1,5 +1,6 @@
 package com.example.mynotes.notes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mynotes.R;
+import com.example.mynotes.addeditnote.AddEditNoteActivity;
 import com.example.mynotes.data.Note;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by mateus on 23/01/18.
@@ -75,5 +78,17 @@ public class NotesFragment extends Fragment implements NotesContract.View {
     @Override
     public void showLoadingNotesError() {
         Toast.makeText(getActivity(), R.string.error_loading_notes, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showAddEditNotePage(int noteId) {
+        Intent intent = new Intent(getContext(), AddEditNoteActivity.class);
+        intent.putExtra(AddEditNoteActivity.EXTRA_NOTE_ID, noteId);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.floatingActionButton)
+    public void onClickAddNote() {
+        presenter.addNewNote();
     }
 }

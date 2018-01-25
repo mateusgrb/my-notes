@@ -17,9 +17,11 @@ public interface NotesContract {
         boolean isActive();
         void showNotes(List<Note> notes);
         void showLoadingNotesError();
+        void showAddEditNotePage(int noteId);
     }
 
     interface Presenter extends BasePresenter {
 
+        void addNewNote();
     }
 }

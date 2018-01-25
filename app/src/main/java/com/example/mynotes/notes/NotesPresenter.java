@@ -45,4 +45,9 @@ public class NotesPresenter implements NotesContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void addNewNote() {
+        view.showAddEditNotePage(0);
+    }
 }

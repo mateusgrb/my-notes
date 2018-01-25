@@ -1,18 +1,34 @@
 package com.example.mynotes.data;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by mateus on 24/01/18.
  */
 
+@Entity(tableName = "notes")
 public class Note {
 
-    String title;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo
+    private int id;
 
-    String description;
+    @ColumnInfo
+    private String title;
 
-    public Note(String title, String description) {
+    @ColumnInfo
+    private String description;
+
+    public Note(int id, String title, String description) {
+        this.id = id;
         this.title = title;
         this.description = description;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {

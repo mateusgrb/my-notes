@@ -1,5 +1,9 @@
 package com.example.mynotes.data.source;
 
+import com.example.mynotes.data.Note;
+
+import java.util.List;
+
 /**
  * Created by mateus on 24/01/18.
  */
@@ -28,6 +32,26 @@ public class NotesRepository implements NotesDataSource {
 
     @Override
     public void getNotes(LoadNotesCallback callback) {
+        notesLocalDataSource.getNotes(new LoadNotesCallback() {
+            @Override
+            public void onNotesLoaded(List<Note> notes) {
+                callback.onNotesLoaded(notes);
+            }
 
+            @Override
+            public void onDataNotAvailable() {
+                notesRemoteDataSource.getNotes(new LoadNotesCallback() {
+                    @Override
+                    public void onNotesLoaded(List<Note> notes) {
+                        //TODO
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        callback.onDataNotAvailable();
+                    }
+                });
+            }
+        });
     }
 }
