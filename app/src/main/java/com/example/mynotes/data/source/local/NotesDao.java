@@ -28,4 +28,7 @@ public interface NotesDao {
 
     @Query("SELECT * FROM notes")
     List<Note> getAllNotes();
+
+    @Query("SELECT * FROM notes where id = :noteId")
+    Note getNoteById(int noteId);
 }

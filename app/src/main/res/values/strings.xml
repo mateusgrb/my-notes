@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">My Notes</string>
-    <string name="error_loading_notes">Failed to load notes. Please try again later.</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+
+    <string name="error_loading_notes">Failed to load notes. Please try again later.</string>
+    <string name="error_loading_note">Failed to load note. Please try again later.</string>
 </resources>

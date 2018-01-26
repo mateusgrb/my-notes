@@ -1,5 +1,6 @@
 package com.example.mynotes.data.source.remote;
 
+import com.example.mynotes.data.Note;
 import com.example.mynotes.data.source.NotesDataSource;
 
 /**
@@ -22,6 +23,21 @@ public class NotesRemoteDataSource implements NotesDataSource {
 
     @Override
     public void getNotes(LoadNotesCallback callback) {
+
+    }
+
+    @Override
+    public void createNote(Note note) {
+
+    }
+
+    @Override
+    public void updateNote(Note note) {
+
+    }
+
+    @Override
+    public void getNoteById(int noteId, GetNoteCallback callback) {
 
     }
 }

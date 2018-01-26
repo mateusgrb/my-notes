@@ -6,10 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.mynotes.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +22,12 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
 
     public static final String TAG = AddEditNoteFragment.class.getSimpleName();
     private static final String ARGUMENT_NOTE_ID = "NOTE_ID";
+
+    @BindView(R.id.titleEditText)
+    EditText titleEditText;
+
+    @BindView(R.id.descriptionEditText)
+    EditText descriptionEditText;
 
     private AddEditNoteContract.Presenter presenter;
 
@@ -38,7 +48,35 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
+    }
+
+    @Override
     public void setPresenter(AddEditNoteContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void showNotesList() {
+        getActivity().finish();
+    }
+
+    @Override
+    public void fillForm(String title, String description) {
+        titleEditText.setText(title);
+        descriptionEditText.setText(description);
+    }
+
+    @Override
+    public void showLoadingNotesError() {
+        Toast.makeText(getActivity(), R.string.error_loading_note, Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.floatingActionButton)
+    public void onClickSaveNote() {
+        presenter.saveNote(titleEditText.getText().toString(),
+                descriptionEditText.getText().toString());
     }
 }

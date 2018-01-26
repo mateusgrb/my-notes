@@ -12,9 +12,22 @@ public interface NotesDataSource {
 
     void getNotes(LoadNotesCallback callback);
 
+    void createNote(Note note);
+
+    void updateNote(Note note);
+
+    void getNoteById(int noteId, GetNoteCallback callback);
+
     interface LoadNotesCallback {
 
         void onNotesLoaded(List<Note> notes);
+
+        void onDataNotAvailable();
+    }
+
+    interface GetNoteCallback {
+
+        void onNoteLoaded(Note note);
 
         void onDataNotAvailable();
     }

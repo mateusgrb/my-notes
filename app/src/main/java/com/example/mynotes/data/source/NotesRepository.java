@@ -54,4 +54,19 @@ public class NotesRepository implements NotesDataSource {
             }
         });
     }
+
+    @Override
+    public void createNote(Note note) {
+        notesLocalDataSource.createNote(note);
+    }
+
+    @Override
+    public void updateNote(Note note) {
+        notesLocalDataSource.updateNote(note);
+    }
+
+    @Override
+    public void getNoteById(int noteId, GetNoteCallback callback) {
+        notesLocalDataSource.getNoteById(noteId, callback);
+    }
 }

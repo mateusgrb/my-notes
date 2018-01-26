@@ -1,5 +1,7 @@
 package com.example.mynotes.addeditnote;
 
+import com.example.mynotes.data.Note;
+import com.example.mynotes.data.source.NotesDataSource;
 import com.example.mynotes.data.source.NotesRepository;
 
 /**
@@ -22,6 +24,37 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
 
     @Override
     public void start() {
+        if (noteId != 0) {
+            repository.getNoteById(noteId, new NotesDataSource.GetNoteCallback() {
+                @Override
+                public void onNoteLoaded(Note note) {
+                    view.fillForm(note.getTitle(), note.getDescription());
+                }
 
+                @Override
+                public void onDataNotAvailable() {
+                    view.showLoadingNotesError();
+                    view.showNotesList();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void saveNote(String title, String description) {
+        if (noteId == 0) {
+            createNote(title, description);
+        } else {
+            updateNote(title, description);
+        }
+        view.showNotesList();
+    }
+
+    private void createNote(String title, String description) {
+        repository.createNote(new Note(title, description));
+    }
+
+    private void updateNote(String title, String description) {
+        repository.updateNote(new Note(noteId, title, description));
     }
 }

@@ -1,7 +1,8 @@
 package com.example.mynotes.addeditnote;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.mynotes.R;
@@ -9,8 +10,6 @@ import com.example.mynotes.data.source.NotesRepository;
 import com.example.mynotes.data.source.local.AppDatabase;
 import com.example.mynotes.data.source.local.NotesLocalDataSource;
 import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
-import com.example.mynotes.notes.NotesFragment;
-import com.example.mynotes.notes.NotesPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,14 +28,23 @@ public class AddEditNoteActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         int noteId = getIntent().getIntExtra(EXTRA_NOTE_ID, 0);
         AddEditNoteFragment fragment = AddEditNoteFragment.newInstance(noteId);
-        new AddEditNotePresenter(fragment, NotesRepository.getInstance(NotesLocalDataSource.getInstance(
-                AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
-                NotesRemoteDataSource.getInstance()), noteId);
+        new AddEditNotePresenter(fragment,
+                NotesRepository.getInstance(NotesLocalDataSource.getInstance(
+                        AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
+                        NotesRemoteDataSource.getInstance()), noteId);
 
         getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
                 AddEditNoteFragment.TAG).commit();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

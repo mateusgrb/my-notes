@@ -30,7 +30,7 @@ public class NotesPresenter implements NotesContract.Presenter {
         repository.getNotes(new NotesDataSource.LoadNotesCallback() {
             @Override
             public void onNotesLoaded(List<Note> notes) {
-                if(!view.isActive()) {
+                if (!view.isActive()) {
                     return;
                 }
                 view.showNotes(notes);
@@ -38,7 +38,7 @@ public class NotesPresenter implements NotesContract.Presenter {
 
             @Override
             public void onDataNotAvailable() {
-                if(!view.isActive()) {
+                if (!view.isActive()) {
                     return;
                 }
                 view.showLoadingNotesError();
@@ -49,5 +49,10 @@ public class NotesPresenter implements NotesContract.Presenter {
     @Override
     public void addNewNote() {
         view.showAddEditNotePage(0);
+    }
+
+    @Override
+    public void onNoteClicked(Note note) {
+        view.showAddEditNotePage(note.getId());
     }
 }

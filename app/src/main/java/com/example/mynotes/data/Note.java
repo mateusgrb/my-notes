@@ -2,6 +2,7 @@ package com.example.mynotes.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -22,7 +23,12 @@ public class Note {
     private String description;
 
     public Note(int id, String title, String description) {
+        this(title, description);
         this.id = id;
+    }
+
+    @Ignore
+    public Note(String title, String description) {
         this.title = title;
         this.description = description;
     }

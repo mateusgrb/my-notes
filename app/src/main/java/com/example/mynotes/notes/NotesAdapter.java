@@ -22,16 +22,23 @@ import butterknife.ButterKnife;
 class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
     private final List<Note> notes = new ArrayList<>();
+    private final OnNoteClickListener listener;
 
-    public NotesAdapter() {
-
+    public NotesAdapter(OnNoteClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notes_item, parent,
                 false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setOnClickListener(view1 -> {
+            if (listener != null) {
+                listener.onClick(notes.get(viewHolder.getAdapterPosition()));
+            }
+        });
+        return viewHolder;
     }
 
     @Override
@@ -64,5 +71,9 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    interface OnNoteClickListener {
+        void onClick(Note note);
     }
 }

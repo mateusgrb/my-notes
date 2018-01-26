@@ -23,5 +23,7 @@ public interface NotesContract {
     interface Presenter extends BasePresenter {
 
         void addNewNote();
+
+        void onNoteClicked(Note note);
     }
 }

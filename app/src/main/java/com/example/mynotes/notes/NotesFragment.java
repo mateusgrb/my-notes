@@ -48,7 +48,12 @@ public class NotesFragment extends Fragment implements NotesContract.View {
         View view = inflater.inflate(R.layout.fragment_notes, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new NotesAdapter();
+        adapter = new NotesAdapter(new NotesAdapter.OnNoteClickListener() {
+            @Override
+            public void onClick(Note note) {
+                presenter.onNoteClicked(note);
+            }
+        });
         notesList.setAdapter(adapter);
         notesList.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

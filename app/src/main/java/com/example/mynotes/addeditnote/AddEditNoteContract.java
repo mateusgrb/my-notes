@@ -11,9 +11,15 @@ public interface AddEditNoteContract {
 
     interface View extends BaseView<Presenter> {
 
+        void showNotesList();
+
+        void fillForm(String title, String description);
+
+        void showLoadingNotesError();
     }
 
     interface Presenter extends BasePresenter {
 
+        void saveNote(String title, String description);
     }
 }
