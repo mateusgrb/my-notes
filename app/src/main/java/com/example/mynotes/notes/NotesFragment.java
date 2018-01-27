@@ -1,6 +1,5 @@
 package com.example.mynotes.notes;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,14 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.mynotes.R;
-import com.example.mynotes.addeditnote.AddEditNoteActivity;
-import com.example.mynotes.data.Note;
 import com.example.mynotes.data.source.NotesRepository;
 import com.example.mynotes.data.source.local.AppDatabase;
 import com.example.mynotes.data.source.local.NotesLocalDataSource;
 import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
-
-import java.util.List;
+import com.example.mynotes.util.providers.Navigator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,10 +40,10 @@ public class NotesFragment extends Fragment {
     private CompositeDisposable disposables = new CompositeDisposable();
     private NotesAdapter adapter;
     private NotesViewModel notesViewModel;
+    private NotesViewModel navigatorViewModel;
 
     public static NotesFragment newInstance() {
-        NotesFragment fragment = new NotesFragment();
-        return fragment;
+        return new NotesFragment();
     }
 
     @Nullable
@@ -57,9 +53,7 @@ public class NotesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notes, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new NotesAdapter(note -> {
-            //TODO handle click on list item
-        });
+        adapter = new NotesAdapter();
         notesList.setAdapter(adapter);
         notesList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -67,7 +61,8 @@ public class NotesFragment extends Fragment {
                 NotesRepository.getInstance(NotesLocalDataSource.getInstance(
                         AppDatabase.getInstance(
                                 getActivity().getApplicationContext()).getNotesDao()),
-                        NotesRemoteDataSource.getInstance()));
+                        NotesRemoteDataSource.getInstance()),
+                new NotesNavigator(new Navigator(getActivity())));
 
         return view;
     }
@@ -84,19 +79,9 @@ public class NotesFragment extends Fragment {
         super.onPause();
     }
 
-    public void showNotes(List<Note> notes) {
-        adapter.setData(notes);
-    }
-
-    public void showAddEditNotePage(int noteId) {
-        Intent intent = new Intent(getContext(), AddEditNoteActivity.class);
-        intent.putExtra(AddEditNoteActivity.EXTRA_NOTE_ID, noteId);
-        startActivity(intent);
-    }
-
     @OnClick(R.id.floatingActionButton)
     public void onClickAddNote() {
-        //TODO add note
+        notesViewModel.openAddNewNotePage();
     }
 
     private void bindViewModel() {
@@ -107,12 +92,12 @@ public class NotesFragment extends Fragment {
                 this::showError));
     }
 
-    public void showError(@StringRes int resourceId) {
-        Toast.makeText(getActivity(), resourceId, Toast.LENGTH_LONG).show();
-    }
-
     private void unbindViewModel() {
         disposables.clear();
+    }
+
+    public void showError(@StringRes int resourceId) {
+        Toast.makeText(getActivity(), resourceId, Toast.LENGTH_LONG).show();
     }
 
 }

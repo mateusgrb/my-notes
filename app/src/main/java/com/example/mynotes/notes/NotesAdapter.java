@@ -14,6 +14,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
 
 /**
  * Created by mateus on 23/01/18.
@@ -21,12 +23,7 @@ import butterknife.ButterKnife;
 
 class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
-    private final List<Note> notes = new ArrayList<>();
-    private final OnNoteClickListener listener;
-
-    public NotesAdapter(OnNoteClickListener listener) {
-        this.listener = listener;
-    }
+    private final List<NoteItem> noteItems = new ArrayList<>();
 
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,28 +31,28 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
                 false);
         ViewHolder viewHolder = new ViewHolder(view);
         view.setOnClickListener(view1 -> {
-            if (listener != null) {
-                listener.onClick(notes.get(viewHolder.getAdapterPosition()));
-            }
+            Action action = noteItems.get(viewHolder.getAdapterPosition()).getOnClickAction();
+            Completable.fromAction(action).subscribe();
         });
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Note note = notes.get(position);
+        NoteItem noteItem = noteItems.get(position);
+        Note note = noteItem.getNote();
         holder.title.setText(note.getTitle());
         holder.description.setText(note.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return noteItems.size();
     }
 
-    public void setData(List<Note> notes) {
-        this.notes.clear();
-        this.notes.addAll(notes);
+    public void setData(List<NoteItem> notes) {
+        this.noteItems.clear();
+        this.noteItems.addAll(notes);
         notifyDataSetChanged();
     }
 
