@@ -16,10 +16,14 @@ public interface AddEditNoteContract {
         void fillForm(String title, String description);
 
         void showLoadingNotesError();
+
+        void hideDeleteOption();
     }
 
     interface Presenter extends BasePresenter {
 
         void saveNote(String title, String description);
+
+        void deleteNote();
     }
 }

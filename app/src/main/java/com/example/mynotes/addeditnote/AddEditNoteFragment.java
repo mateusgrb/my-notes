@@ -4,6 +4,9 @@ package com.example.mynotes.addeditnote;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -30,6 +33,7 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     EditText descriptionEditText;
 
     private AddEditNoteContract.Presenter presenter;
+    private boolean showDeleteButton = true;
 
     public static AddEditNoteFragment newInstance(int noteId) {
         AddEditNoteFragment fragment = new AddEditNoteFragment();
@@ -44,6 +48,7 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit_note, container, false);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -51,6 +56,25 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     public void onResume() {
         super.onResume();
         presenter.start();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.addeditnote, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_delete);
+        item.setVisible(showDeleteButton);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                presenter.deleteNote();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -72,6 +96,12 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     @Override
     public void showLoadingNotesError() {
         Toast.makeText(getActivity(), R.string.error_loading_note, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideDeleteOption() {
+        showDeleteButton = false;
+        getActivity().invalidateOptionsMenu();
     }
 
     @OnClick(R.id.floatingActionButton)

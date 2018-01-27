@@ -66,6 +66,11 @@ public class NotesRepository implements NotesDataSource {
     }
 
     @Override
+    public void deleteNoteById(int noteId) {
+        notesLocalDataSource.deleteNoteById(noteId);
+    }
+
+    @Override
     public void getNoteById(int noteId, GetNoteCallback callback) {
         notesLocalDataSource.getNoteById(noteId, callback);
     }

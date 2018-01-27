@@ -36,14 +36,8 @@ public class NotesLocalDataSource implements NotesDataSource {
     @Override
     public void getNotes(final LoadNotesCallback callback) {
         new Thread(() -> {
-            final List<Note> allNotes = notesDao.getAllNotes();
-            handler.post(() -> {
-                if (allNotes.isEmpty()) {
-                    callback.onDataNotAvailable();
-                } else {
-                    callback.onNotesLoaded(allNotes);
-                }
-            });
+            final List<Note> allNotes = notesDao.getAll();
+            handler.post(() -> callback.onNotesLoaded(allNotes));
         }).start();
     }
 
@@ -58,9 +52,14 @@ public class NotesLocalDataSource implements NotesDataSource {
     }
 
     @Override
+    public void deleteNoteById(int noteId) {
+        new Thread(() -> notesDao.deleteById(noteId)).start();
+    }
+
+    @Override
     public void getNoteById(int noteId, GetNoteCallback callback) {
         new Thread(() -> {
-            Note note = notesDao.getNoteById(noteId);
+            Note note = notesDao.getById(noteId);
             handler.post(() -> {
                 if (note == null) {
                     callback.onDataNotAvailable();

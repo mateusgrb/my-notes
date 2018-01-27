@@ -37,6 +37,11 @@ public class NotesRemoteDataSource implements NotesDataSource {
     }
 
     @Override
+    public void deleteNoteById(int noteId) {
+
+    }
+
+    @Override
     public void getNoteById(int noteId, GetNoteCallback callback) {
 
     }

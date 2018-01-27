@@ -12,11 +12,13 @@ public interface NotesDataSource {
 
     void getNotes(LoadNotesCallback callback);
 
+    void getNoteById(int noteId, GetNoteCallback callback);
+
     void createNote(Note note);
 
     void updateNote(Note note);
 
-    void getNoteById(int noteId, GetNoteCallback callback);
+    void deleteNoteById(int noteId);
 
     interface LoadNotesCallback {
 

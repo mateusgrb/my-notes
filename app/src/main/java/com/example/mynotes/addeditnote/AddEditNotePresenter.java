@@ -14,8 +14,7 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
     private final NotesRepository repository;
     private final int noteId;
 
-    public AddEditNotePresenter(AddEditNoteContract.View view, NotesRepository repository,
-            int noteId) {
+    AddEditNotePresenter(AddEditNoteContract.View view, NotesRepository repository, int noteId) {
         this.view = view;
         this.repository = repository;
         this.noteId = noteId;
@@ -24,7 +23,9 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
 
     @Override
     public void start() {
-        if (noteId != 0) {
+        if (noteId == 0) {
+            view.hideDeleteOption();
+        } else {
             repository.getNoteById(noteId, new NotesDataSource.GetNoteCallback() {
                 @Override
                 public void onNoteLoaded(Note note) {
@@ -47,6 +48,12 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
         } else {
             updateNote(title, description);
         }
+        view.showNotesList();
+    }
+
+    @Override
+    public void deleteNote() {
+        repository.deleteNoteById(noteId);
         view.showNotesList();
     }
 
