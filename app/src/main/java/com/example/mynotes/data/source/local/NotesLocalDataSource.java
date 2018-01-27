@@ -1,12 +1,12 @@
 package com.example.mynotes.data.source.local;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.example.mynotes.data.Note;
 import com.example.mynotes.data.source.NotesDataSource;
 
 import java.util.List;
+
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 /**
  * Created by mateus on 24/01/18.
@@ -16,7 +16,6 @@ public class NotesLocalDataSource implements NotesDataSource {
 
     private static volatile NotesLocalDataSource INSTANCE;
     private final NotesDao notesDao;
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public static NotesLocalDataSource getInstance(NotesDao notesDao) {
         if (INSTANCE == null) {
@@ -34,11 +33,13 @@ public class NotesLocalDataSource implements NotesDataSource {
     }
 
     @Override
-    public void getNotes(final LoadNotesCallback callback) {
-        new Thread(() -> {
-            final List<Note> allNotes = notesDao.getAll();
-            handler.post(() -> callback.onNotesLoaded(allNotes));
-        }).start();
+    public Flowable<List<Note>> getNotes() {
+        return notesDao.getAll();
+    }
+
+    @Override
+    public Observable<Note> getNoteById(int noteId) {
+        return null;
     }
 
     @Override
@@ -54,19 +55,5 @@ public class NotesLocalDataSource implements NotesDataSource {
     @Override
     public void deleteNoteById(int noteId) {
         new Thread(() -> notesDao.deleteById(noteId)).start();
-    }
-
-    @Override
-    public void getNoteById(int noteId, GetNoteCallback callback) {
-        new Thread(() -> {
-            Note note = notesDao.getById(noteId);
-            handler.post(() -> {
-                if (note == null) {
-                    callback.onDataNotAvailable();
-                } else {
-                    callback.onNoteLoaded(note);
-                }
-            });
-        }).start();
     }
 }

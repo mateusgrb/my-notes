@@ -4,15 +4,18 @@ import com.example.mynotes.data.Note;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+
 /**
  * Created by mateus on 24/01/18.
  */
 
 public interface NotesDataSource {
 
-    void getNotes(LoadNotesCallback callback);
+    Flowable<List<Note>> getNotes();
 
-    void getNoteById(int noteId, GetNoteCallback callback);
+    Observable<Note> getNoteById(int noteId);
 
     void createNote(Note note);
 

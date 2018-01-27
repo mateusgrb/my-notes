@@ -4,6 +4,9 @@ import com.example.mynotes.data.Note;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+
 /**
  * Created by mateus on 24/01/18.
  */
@@ -31,28 +34,13 @@ public class NotesRepository implements NotesDataSource {
     }
 
     @Override
-    public void getNotes(LoadNotesCallback callback) {
-        notesLocalDataSource.getNotes(new LoadNotesCallback() {
-            @Override
-            public void onNotesLoaded(List<Note> notes) {
-                callback.onNotesLoaded(notes);
-            }
+    public Flowable<List<Note>> getNotes() {
+        return notesLocalDataSource.getNotes();
+    }
 
-            @Override
-            public void onDataNotAvailable() {
-                notesRemoteDataSource.getNotes(new LoadNotesCallback() {
-                    @Override
-                    public void onNotesLoaded(List<Note> notes) {
-                        //TODO
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-                        callback.onDataNotAvailable();
-                    }
-                });
-            }
-        });
+    @Override
+    public Observable<Note> getNoteById(int noteId) {
+        return notesLocalDataSource.getNoteById(noteId);
     }
 
     @Override
@@ -68,10 +56,5 @@ public class NotesRepository implements NotesDataSource {
     @Override
     public void deleteNoteById(int noteId) {
         notesLocalDataSource.deleteNoteById(noteId);
-    }
-
-    @Override
-    public void getNoteById(int noteId, GetNoteCallback callback) {
-        notesLocalDataSource.getNoteById(noteId, callback);
     }
 }

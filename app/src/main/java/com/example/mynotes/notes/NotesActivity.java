@@ -27,9 +27,6 @@ public class NotesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         NotesFragment fragment = NotesFragment.newInstance();
-        new NotesPresenter(fragment, NotesRepository.getInstance(NotesLocalDataSource.getInstance(
-                AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
-                NotesRemoteDataSource.getInstance()));
 
         getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
                 NotesFragment.TAG).commit();

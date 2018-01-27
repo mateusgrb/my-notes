@@ -9,6 +9,8 @@ import com.example.mynotes.data.Note;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 /**
  * Created by mateus on 25/01/18.
  */
@@ -26,7 +28,7 @@ public interface NotesDao {
     void update(Note note);
 
     @Query("SELECT * FROM notes")
-    List<Note> getAll();
+    Flowable<List<Note>> getAll();
 
     @Query("SELECT * FROM notes where id = :noteId")
     Note getById(int noteId);

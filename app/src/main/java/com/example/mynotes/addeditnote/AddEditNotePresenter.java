@@ -26,18 +26,18 @@ public class AddEditNotePresenter implements AddEditNoteContract.Presenter {
         if (noteId == 0) {
             view.hideDeleteOption();
         } else {
-            repository.getNoteById(noteId, new NotesDataSource.GetNoteCallback() {
-                @Override
-                public void onNoteLoaded(Note note) {
-                    view.fillForm(note.getTitle(), note.getDescription());
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    view.showLoadingNotesError();
-                    view.showNotesList();
-                }
-            });
+//            repository.getNoteById(noteId, new NotesDataSource.GetNoteCallback() {
+//                @Override
+//                public void onNoteLoaded(Note note) {
+//                    view.fillForm(note.getTitle(), note.getDescription());
+//                }
+//
+//                @Override
+//                public void onDataNotAvailable() {
+//                    view.showLoadingNotesError();
+//                    view.showNotesList();
+//                }
+//            });
         }
     }
 
