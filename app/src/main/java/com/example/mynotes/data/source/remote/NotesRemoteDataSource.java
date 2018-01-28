@@ -5,7 +5,7 @@ import com.example.mynotes.data.source.NotesDataSource;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -27,7 +27,7 @@ public class NotesRemoteDataSource implements NotesDataSource {
     }
 
     @Override
-    public Flowable<List<Note>> getNotes() {
+    public Observable<List<Note>> getNotes() {
         return null;
     }
 
@@ -37,17 +37,17 @@ public class NotesRemoteDataSource implements NotesDataSource {
     }
 
     @Override
-    public void createNote(Note note) {
-
+    public Completable createNote(Note note) {
+        return null;
     }
 
     @Override
-    public void updateNote(Note note) {
-
+    public Completable updateNote(Note note) {
+        return null;
     }
 
     @Override
-    public void deleteNoteById(int noteId) {
-
+    public Completable deleteNoteById(int noteId) {
+        return null;
     }
 }

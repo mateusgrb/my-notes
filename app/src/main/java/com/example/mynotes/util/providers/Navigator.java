@@ -34,4 +34,11 @@ public class Navigator implements BaseNavigator {
             activity.get().startActivityForResult(intent, requestCode);
         }
     }
+
+    @Override
+    public void finishActivity() {
+        if (activity.get() != null) {
+            activity.get().finish();
+        }
+    }
 }

@@ -10,4 +10,6 @@ public interface BaseNavigator {
 
     void startActivityForResultWithExtra(Class cls, int requestCode, String extraKey,
             int extraValue);
+
+    void finishActivity();
 }

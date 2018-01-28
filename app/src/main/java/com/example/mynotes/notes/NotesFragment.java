@@ -40,7 +40,6 @@ public class NotesFragment extends Fragment {
     private CompositeDisposable disposables = new CompositeDisposable();
     private NotesAdapter adapter;
     private NotesViewModel notesViewModel;
-    private NotesViewModel navigatorViewModel;
 
     public static NotesFragment newInstance() {
         return new NotesFragment();

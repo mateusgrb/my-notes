@@ -10,6 +10,7 @@ import com.example.mynotes.data.Note;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 /**
  * Created by mateus on 25/01/18.
@@ -31,5 +32,5 @@ public interface NotesDao {
     Flowable<List<Note>> getAll();
 
     @Query("SELECT * FROM notes where id = :noteId")
-    Note getById(int noteId);
+    Single<Note> getById(int noteId);
 }

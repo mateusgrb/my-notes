@@ -6,10 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.mynotes.R;
-import com.example.mynotes.data.source.NotesRepository;
-import com.example.mynotes.data.source.local.AppDatabase;
-import com.example.mynotes.data.source.local.NotesLocalDataSource;
-import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,10 +29,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
 
         int noteId = getIntent().getIntExtra(EXTRA_NOTE_ID, 0);
         AddEditNoteFragment fragment = AddEditNoteFragment.newInstance(noteId);
-        new AddEditNotePresenter(fragment,
-                NotesRepository.getInstance(NotesLocalDataSource.getInstance(
-                        AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
-                        NotesRemoteDataSource.getInstance()), noteId);
 
         getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
                 AddEditNoteFragment.TAG).commit();

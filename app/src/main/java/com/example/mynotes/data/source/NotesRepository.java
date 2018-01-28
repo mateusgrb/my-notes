@@ -4,7 +4,7 @@ import com.example.mynotes.data.Note;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -34,7 +34,7 @@ public class NotesRepository implements NotesDataSource {
     }
 
     @Override
-    public Flowable<List<Note>> getNotes() {
+    public Observable<List<Note>> getNotes() {
         return notesLocalDataSource.getNotes();
     }
 
@@ -44,17 +44,17 @@ public class NotesRepository implements NotesDataSource {
     }
 
     @Override
-    public void createNote(Note note) {
-        notesLocalDataSource.createNote(note);
+    public Completable createNote(Note note) {
+        return notesLocalDataSource.createNote(note);
     }
 
     @Override
-    public void updateNote(Note note) {
-        notesLocalDataSource.updateNote(note);
+    public Completable updateNote(Note note) {
+        return notesLocalDataSource.updateNote(note);
     }
 
     @Override
-    public void deleteNoteById(int noteId) {
-        notesLocalDataSource.deleteNoteById(noteId);
+    public Completable deleteNoteById(int noteId) {
+        return notesLocalDataSource.deleteNoteById(noteId);
     }
 }

@@ -4,7 +4,7 @@ import com.example.mynotes.data.Note;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -13,27 +13,14 @@ import io.reactivex.Observable;
 
 public interface NotesDataSource {
 
-    Flowable<List<Note>> getNotes();
+    Observable<List<Note>> getNotes();
 
     Observable<Note> getNoteById(int noteId);
 
-    void createNote(Note note);
+    Completable createNote(Note note);
 
-    void updateNote(Note note);
+    Completable updateNote(Note note);
 
-    void deleteNoteById(int noteId);
+    Completable deleteNoteById(int noteId);
 
-    interface LoadNotesCallback {
-
-        void onNotesLoaded(List<Note> notes);
-
-        void onDataNotAvailable();
-    }
-
-    interface GetNoteCallback {
-
-        void onNoteLoaded(Note note);
-
-        void onDataNotAvailable();
-    }
 }

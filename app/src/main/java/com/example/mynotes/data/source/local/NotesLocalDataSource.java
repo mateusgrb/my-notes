@@ -5,7 +5,7 @@ import com.example.mynotes.data.source.NotesDataSource;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -33,27 +33,27 @@ public class NotesLocalDataSource implements NotesDataSource {
     }
 
     @Override
-    public Flowable<List<Note>> getNotes() {
-        return notesDao.getAll();
+    public Observable<List<Note>> getNotes() {
+        return notesDao.getAll().toObservable();
     }
 
     @Override
     public Observable<Note> getNoteById(int noteId) {
-        return null;
+        return notesDao.getById(noteId).toObservable();
     }
 
     @Override
-    public void createNote(Note note) {
-        new Thread(() -> notesDao.insert(note)).start();
+    public Completable createNote(Note note) {
+        return Completable.fromAction(() -> notesDao.insert(note));
     }
 
     @Override
-    public void updateNote(Note note) {
-        new Thread(() -> notesDao.update(note)).start();
+    public Completable updateNote(Note note) {
+        return Completable.fromAction(() -> notesDao.update(note));
     }
 
     @Override
-    public void deleteNoteById(int noteId) {
-        new Thread(() -> notesDao.deleteById(noteId)).start();
+    public Completable deleteNoteById(int noteId) {
+        return Completable.fromAction(() -> notesDao.deleteById(noteId));
     }
 }

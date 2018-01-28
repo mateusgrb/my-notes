@@ -7,7 +7,7 @@ import com.example.mynotes.data.source.NotesRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 /**
@@ -18,18 +18,18 @@ public class NotesViewModel {
 
     private final NotesRepository repository;
 
-    private final PublishSubject<Integer> errorText;
+    private final PublishSubject<Integer> errorMessage;
     private final NotesNavigator navigator;
 
     public NotesViewModel(NotesRepository repository, NotesNavigator navigator) {
         this.repository = repository;
         this.navigator = navigator;
-        errorText = PublishSubject.create();
+        errorMessage = PublishSubject.create();
     }
 
-    public Flowable<List<NoteItem>> getNotes() {
+    public Observable<List<NoteItem>> getNotes() {
         return repository.getNotes()
-                .doOnError(throwable -> errorText.onNext(R.string.error_loading_notes))
+                .doOnError(throwable -> errorMessage.onNext(R.string.error_loading_notes))
                 .map(notes -> {
                     List<NoteItem> noteItems = new ArrayList<>();
                     for (Note note : notes) {
@@ -48,6 +48,6 @@ public class NotesViewModel {
     }
 
     public PublishSubject<Integer> getErrorMessage() {
-        return errorText;
+        return errorMessage;
     }
 }

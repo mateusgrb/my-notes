@@ -2,6 +2,7 @@ package com.example.mynotes.addeditnote;
 
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,15 +14,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mynotes.R;
+import com.example.mynotes.data.Note;
+import com.example.mynotes.data.source.NotesRepository;
+import com.example.mynotes.data.source.local.AppDatabase;
+import com.example.mynotes.data.source.local.NotesLocalDataSource;
+import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
+import com.example.mynotes.util.providers.Navigator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddEditNoteFragment extends Fragment implements AddEditNoteContract.View {
+public class AddEditNoteFragment extends Fragment {
 
     public static final String TAG = AddEditNoteFragment.class.getSimpleName();
     private static final String ARGUMENT_NOTE_ID = "NOTE_ID";
@@ -32,8 +42,10 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     @BindView(R.id.descriptionEditText)
     EditText descriptionEditText;
 
-    private AddEditNoteContract.Presenter presenter;
     private boolean showDeleteButton = true;
+
+    private AddEditNoteViewModel viewModel;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     public static AddEditNoteFragment newInstance(int noteId) {
         AddEditNoteFragment fragment = new AddEditNoteFragment();
@@ -49,13 +61,27 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
         View view = inflater.inflate(R.layout.fragment_add_edit_note, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+
+        viewModel = new AddEditNoteViewModel(
+                NotesRepository.getInstance(NotesLocalDataSource.getInstance(
+                        AppDatabase.getInstance(
+                                getActivity().getApplicationContext()).getNotesDao()),
+                        NotesRemoteDataSource.getInstance()),
+                new AddEditNoteNavigator(new Navigator(getActivity())), getNoteId());
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.start();
+        bindViewModel();
+    }
+
+    @Override
+    public void onPause() {
+        unbindViewModel();
+        super.onPause();
     }
 
     @Override
@@ -70,43 +96,54 @@ public class AddEditNoteFragment extends Fragment implements AddEditNoteContract
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_delete:
-                presenter.deleteNote();
+                viewModel.deleteNote().subscribeOn(Schedulers.computation()).observeOn(
+                        AndroidSchedulers.mainThread()).subscribe();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    @Override
-    public void setPresenter(AddEditNoteContract.Presenter presenter) {
-        this.presenter = presenter;
+    @OnClick(R.id.floatingActionButton)
+    public void onClickSaveNote() {
+        viewModel.saveNote(titleEditText.getText().toString(),
+                descriptionEditText.getText().toString()).subscribeOn(
+                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe();
     }
 
-    @Override
-    public void showNotesList() {
-        getActivity().finish();
+    private void bindViewModel() {
+        disposables.add(viewModel.getShowDeleteOption().subscribeOn(
+                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                this::updateDeleteButtonVisibility));
+        disposables.add(viewModel.getErrorMessage().subscribeOn(
+                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                this::showError));
+        disposables.add(viewModel.getNote().subscribeOn(Schedulers.computation()).observeOn(
+                AndroidSchedulers.mainThread()).subscribe(this::fillForm));
     }
 
-    @Override
-    public void fillForm(String title, String description) {
-        titleEditText.setText(title);
-        descriptionEditText.setText(description);
+    private void unbindViewModel() {
+        disposables.clear();
     }
 
-    @Override
-    public void showLoadingNotesError() {
-        Toast.makeText(getActivity(), R.string.error_loading_note, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void hideDeleteOption() {
-        showDeleteButton = false;
+    public void updateDeleteButtonVisibility(boolean showDeleteButton) {
+        this.showDeleteButton = showDeleteButton;
         getActivity().invalidateOptionsMenu();
     }
 
-    @OnClick(R.id.floatingActionButton)
-    public void onClickSaveNote() {
-        presenter.saveNote(titleEditText.getText().toString(),
-                descriptionEditText.getText().toString());
+    private void fillForm(Note note) {
+        titleEditText.setText(note.getTitle());
+        descriptionEditText.setText(note.getDescription());
+    }
+
+    public void showError(@StringRes int resourceId) {
+        Toast.makeText(getActivity(), resourceId, Toast.LENGTH_LONG).show();
+    }
+
+    private int getNoteId() {
+        if (getArguments() != null) {
+            return getArguments().getInt(ARGUMENT_NOTE_ID);
+        }
+        return 0;
     }
 }
