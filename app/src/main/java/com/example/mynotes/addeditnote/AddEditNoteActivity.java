@@ -32,14 +32,20 @@ public class AddEditNoteActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         int noteId = getIntent().getIntExtra(EXTRA_NOTE_ID, 0);
-        AddEditNoteFragment fragment = AddEditNoteFragment.newInstance(noteId);
+
+        AddEditNoteFragment fragment =
+                (AddEditNoteFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.contentFrame);
+        if (fragment == null) {
+            fragment = AddEditNoteFragment.newInstance(noteId);
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
+                    AddEditNoteFragment.TAG).commit();
+        }
         new AddEditNotePresenter(fragment,
                 NotesRepository.getInstance(NotesLocalDataSource.getInstance(
                         AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
                         NotesRemoteDataSource.getInstance()), noteId);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
-                AddEditNoteFragment.TAG).commit();
     }
 
     @Override

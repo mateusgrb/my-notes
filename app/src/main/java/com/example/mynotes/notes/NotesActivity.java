@@ -26,12 +26,15 @@ public class NotesActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        NotesFragment fragment = NotesFragment.newInstance();
+        NotesFragment fragment =
+                (NotesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (fragment == null) {
+            fragment = NotesFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
+                    NotesFragment.TAG).commit();
+        }
         new NotesPresenter(fragment, NotesRepository.getInstance(NotesLocalDataSource.getInstance(
                 AppDatabase.getInstance(getApplicationContext()).getNotesDao()),
                 NotesRemoteDataSource.getInstance()));
-
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
-                NotesFragment.TAG).commit();
     }
 }
