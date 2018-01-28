@@ -28,10 +28,14 @@ public class AddEditNoteActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         int noteId = getIntent().getIntExtra(EXTRA_NOTE_ID, 0);
-        AddEditNoteFragment fragment = AddEditNoteFragment.newInstance(noteId);
-
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
-                AddEditNoteFragment.TAG).commit();
+        AddEditNoteFragment fragment =
+                (AddEditNoteFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.contentFrame);
+        if (fragment == null) {
+            fragment = AddEditNoteFragment.newInstance(noteId);
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
+                    AddEditNoteFragment.TAG).commit();
+        }
     }
 
     @Override

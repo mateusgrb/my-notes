@@ -5,10 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.mynotes.R;
-import com.example.mynotes.data.source.NotesRepository;
-import com.example.mynotes.data.source.local.AppDatabase;
-import com.example.mynotes.data.source.local.NotesLocalDataSource;
-import com.example.mynotes.data.source.remote.NotesRemoteDataSource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,9 +22,12 @@ public class NotesActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        NotesFragment fragment = NotesFragment.newInstance();
-
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
-                NotesFragment.TAG).commit();
+        NotesFragment fragment =
+                (NotesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (fragment == null) {
+            fragment = NotesFragment.newInstance();
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment,
+                    NotesFragment.TAG).commit();
+        }
     }
 }
