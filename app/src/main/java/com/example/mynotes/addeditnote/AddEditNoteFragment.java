@@ -96,8 +96,10 @@ public class AddEditNoteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_delete:
-                viewModel.deleteNote().subscribeOn(Schedulers.computation()).observeOn(
-                        AndroidSchedulers.mainThread()).subscribe();
+                viewModel.deleteNote()
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -107,19 +109,25 @@ public class AddEditNoteFragment extends Fragment {
     @OnClick(R.id.floatingActionButton)
     public void onClickSaveNote() {
         viewModel.saveNote(titleEditText.getText().toString(),
-                descriptionEditText.getText().toString()).subscribeOn(
-                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                descriptionEditText.getText().toString())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     private void bindViewModel() {
-        disposables.add(viewModel.getShowDeleteOption().subscribeOn(
-                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                this::updateDeleteButtonVisibility));
-        disposables.add(viewModel.getErrorMessage().subscribeOn(
-                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                this::showError));
-        disposables.add(viewModel.getNote().subscribeOn(Schedulers.computation()).observeOn(
-                AndroidSchedulers.mainThread()).subscribe(this::fillForm));
+        disposables.add(viewModel.getShowDeleteOption()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateDeleteButtonVisibility));
+        disposables.add(viewModel.getErrorMessage()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showError));
+        disposables.add(viewModel.getNote()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::fillForm));
     }
 
     private void unbindViewModel() {

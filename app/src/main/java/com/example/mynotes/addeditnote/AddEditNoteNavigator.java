@@ -12,8 +12,8 @@ public class AddEditNoteNavigator {
 
     private final BaseNavigator provider;
 
-    public AddEditNoteNavigator(@NonNull BaseNavigator navigationProvider) {
-        provider = navigationProvider;
+    public AddEditNoteNavigator(@NonNull BaseNavigator provider) {
+        this.provider = provider;
     }
 
     public void onNoteUpdated() {

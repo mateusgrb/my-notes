@@ -69,8 +69,4 @@ class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
             ButterKnife.bind(this, itemView);
         }
     }
-
-    interface OnNoteClickListener {
-        void onClick(Note note);
-    }
 }

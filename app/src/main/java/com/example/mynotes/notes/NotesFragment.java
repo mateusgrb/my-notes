@@ -84,11 +84,14 @@ public class NotesFragment extends Fragment {
     }
 
     private void bindViewModel() {
-        disposables.add(notesViewModel.getNotes().subscribeOn(Schedulers.computation()).observeOn(
-                AndroidSchedulers.mainThread()).subscribe(notes -> adapter.setData(notes)));
-        disposables.add(notesViewModel.getErrorMessage().subscribeOn(
-                Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                this::showError));
+        disposables.add(notesViewModel.getNotes()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(notes -> adapter.setData(notes)));
+        disposables.add(notesViewModel.getErrorMessage()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showError));
     }
 
     private void unbindViewModel() {

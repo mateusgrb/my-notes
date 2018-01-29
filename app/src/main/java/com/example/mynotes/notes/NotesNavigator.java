@@ -13,8 +13,8 @@ public class NotesNavigator {
 
     private final BaseNavigator provider;
 
-    public NotesNavigator(BaseNavigator mNavigationProvider) {
-        this.provider = mNavigationProvider;
+    public NotesNavigator(BaseNavigator provider) {
+        this.provider = provider;
     }
 
     void openAddEditNotePage(int noteId) {
