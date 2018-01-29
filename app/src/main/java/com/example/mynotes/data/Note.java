@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Arrays;
+
 /**
  * Created by mateus on 24/01/18.
  */
@@ -43,5 +45,20 @@ public class Note {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return id == note.id &&
+                title.equals(note.title) &&
+                description.equals(note.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new Object[]{id, title, description});
     }
 }
