@@ -37,8 +37,7 @@ public class NotesFragment extends Fragment implements NotesContract.View {
     private NotesAdapter adapter;
 
     public static NotesFragment newInstance() {
-        NotesFragment fragment = new NotesFragment();
-        return fragment;
+        return new NotesFragment();
     }
 
     @Nullable
